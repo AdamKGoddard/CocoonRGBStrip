@@ -1,0 +1,78 @@
+substitutions:
+  devicename: cocoon_rgb_strip
+  upper_devicename: Cocoon RGB Strip
+
+esphome:
+  name: $devicename
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  ssid: "your_SSID_here"
+  password: "your_password_here"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Cocoon Rgb Strip"
+    password: "your_password_here"
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: "your_api_password_here"
+
+ota:
+  password: "your_ota_password_here"
+
+web_server:
+  port: 80
+
+sensor:
+  - platform: wifi_signal
+    name: ${upper_devicename} WiFi Signal
+  - platform: uptime
+    name: ${upper_devicename} Uptime
+
+mqtt:
+  broker: "your_broker_ip_address_here"
+  username: "your_MQTT_username_here"
+  password: "your_MQTT_password_here"
+  discovery: True
+
+switch:
+- platform: restart
+  name: ${upper_devicename} Restart
+
+binary_sensor:
+- platform: gpio
+  name: ${upper_devicename} Button
+  pin: GPIO0
+  on_press:
+    then:
+      - light.toggle: rgb_light
+
+light:
+  - platform: rgb
+    name: "Living Room RGB Lights"
+    red: output_component1
+    green: output_component2
+    blue: output_component3
+    id: rgb_light
+
+output:
+  - platform: esp8266_pwm
+    id: output_component1
+    pin: GPIO4
+    max_power: 100%
+  - platform: esp8266_pwm
+    id: output_component2
+    pin: GPIO12
+    max_power: 100%
+  - platform: esp8266_pwm
+    id: output_component3
+    pin: GPIO14
+    max_power: 100%
