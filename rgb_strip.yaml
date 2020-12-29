@@ -62,6 +62,10 @@ light:
     green: output_component2
     blue: output_component3
     id: rgb_light
+    effects:
+      - random:
+      - strobe:
+      - flicker:
 
 output:
   - platform: esp8266_pwm
